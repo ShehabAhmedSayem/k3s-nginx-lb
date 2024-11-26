@@ -1,0 +1,17 @@
+// Install k3s on master ec2
+curl -sfL https://get.k3s.io | sh -
+
+// Get token from master ec2
+sudo cat /var/lib/rancher/k3s/server/node-token
+
+// Start k3s-agent on all worker ec2, K3S_URL will have master PRIVATE ip and K3S_TOKEN will be the previous step token
+curl -sfL https://get.k3s.io | K3S_URL=https://10.0.1.22:6443 K3S_TOKEN=K10df600ecbb14fb00a01f18ed757e774383a8017157b8e832bd01a449a66f043f4::server:d15805d4912236659173114cf6bf0bd6 sh -
+
+// Check agent status
+systemctl status k3s-agent
+
+// Chmod in master 
+sudo chmod 644 /etc/rancher/k3s/k3s.yaml
+
+// Get nodes in master
+kubectl get nodes -o wide
